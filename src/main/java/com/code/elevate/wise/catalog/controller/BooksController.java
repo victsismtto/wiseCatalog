@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("books")
+@RequestMapping("/books")
 @Log4j2
 public class BooksController {
 
@@ -19,7 +19,21 @@ public class BooksController {
 
     @GetMapping
     public ResponseEntity<List<BookEntity>> getAllBooks(){
-       log.info("test get all");
         return ResponseEntity.ok(service.findAllBooks());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookEntity> getById(@PathVariable("id") String id){
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/genre/{genre}")
+    public ResponseEntity<List<BookEntity>> getByGenre(@PathVariable("genre") String genre){
+        return ResponseEntity.ok(service.findByGenre(genre));
+    }
+
+    @GetMapping("/author/{author}")
+    public ResponseEntity<List<BookEntity>> getByAuthor(@PathVariable("author") String author){
+        return ResponseEntity.ok(service.findByAuthor(author));
     }
 }
