@@ -15,13 +15,13 @@ public class BooksExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleResourceNotFound(NotFoundException ex, HttpServletRequest request) {
-        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
-                .timestamp( LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .path(request.getRequestURI())
-                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(ex.getMessage())
-                .build();
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

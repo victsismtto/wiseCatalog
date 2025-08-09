@@ -1,6 +1,7 @@
 package com.code.elevate.wise.catalog.controller;
 
 
+import com.code.elevate.wise.catalog.domain.dto.BookDTO;
 import com.code.elevate.wise.catalog.domain.entity.BookEntity;
 import com.code.elevate.wise.catalog.service.BooksService;
 import lombok.extern.log4j.Log4j2;
@@ -23,17 +24,17 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookEntity> getById(@PathVariable("id") String id){
+    public ResponseEntity<BookDTO> getById(@PathVariable("id") String id){
         return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<BookEntity>> getByGenre(@PathVariable("genre") String genre){
+    public ResponseEntity<List<BookDTO>> getByGenre(@PathVariable("genre") String genre){
         return ResponseEntity.ok(service.findByGenre(genre));
     }
 
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<BookEntity>> getByAuthor(@PathVariable("author") String author){
+    public ResponseEntity<List<BookDTO>> getByAuthor(@PathVariable("author") String author){
         return ResponseEntity.ok(service.findByAuthor(author));
     }
 }
