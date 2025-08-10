@@ -3,11 +3,11 @@ spring:
     allow-bean-definition-overriding: true
   data:
     redis:
-      host:
-      port:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
     mongodb:
-      host:
-      port:
-      database:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: ${MONGO_DB:local}
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
