@@ -30,7 +30,11 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
                 repository.saveAll(bookEntities);
             }
         });
+    }
 
+    @Override
+    public void deleteListOfBooks() {
+        repository.deleteAll();
     }
 
     public Mono<List<BookEntity>> getEntityList(Mono<SubjectDTO> subjectDTOMono) {
