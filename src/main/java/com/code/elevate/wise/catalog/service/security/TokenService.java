@@ -1,4 +1,4 @@
-package com.code.elevate.wise.catalog.security;
+package com.code.elevate.wise.catalog.service.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,5 +1,6 @@
-package com.code.elevate.wise.catalog.security;
+package com.code.elevate.wise.catalog.config;
 
+import com.code.elevate.wise.catalog.component.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfigurations {
+public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 

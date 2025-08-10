@@ -1,11 +1,11 @@
-package com.code.elevate.wise.catalog.security;
+package com.code.elevate.wise.catalog.component;
 
 import com.code.elevate.wise.catalog.repository.UserRepository;
+import com.code.elevate.wise.catalog.service.security.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

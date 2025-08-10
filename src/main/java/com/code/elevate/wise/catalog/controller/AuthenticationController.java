@@ -1,10 +1,11 @@
-package com.code.elevate.wise.catalog.security;
+package com.code.elevate.wise.catalog.controller;
 
 import com.code.elevate.wise.catalog.domain.dto.AuthenticationDTO;
 import com.code.elevate.wise.catalog.domain.dto.LoginResponseDTO;
 import com.code.elevate.wise.catalog.domain.dto.RegisterDTO;
 import com.code.elevate.wise.catalog.domain.entity.UserEntity;
 import com.code.elevate.wise.catalog.repository.UserRepository;
+import com.code.elevate.wise.catalog.service.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
