@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface BooksRepository extends MongoRepository<BookEntity, String> {
     Optional<List<BookEntity>> findByGenre(String genre);
     Optional<List<BookEntity>> findByAuthor(String author);
+    Optional<BookEntity> findByTitle(String title);
 }
