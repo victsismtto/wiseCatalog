@@ -21,26 +21,31 @@ public class BooksController {
     @GetMapping
     public ResponseEntity<List<BookDTO>> getAllBooks(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws JsonProcessingException {
+        log.info("starting controller - getAllBooks");
         return ResponseEntity.ok(service.findAllBooks(page, size));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getById(@PathVariable("id") String id) throws JsonProcessingException {
+        log.info("starting controller - getById");
         return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<BookDTO>> getByGenre(@PathVariable("genre") String genre){
+    public ResponseEntity<List<BookDTO>> getByGenre(@PathVariable("genre") String genre) {
+        log.info("starting controller - getByGenre");
         return ResponseEntity.ok(service.findByGenre(genre));
     }
 
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<BookDTO>> getByAuthor(@PathVariable("author") String author){
+    public ResponseEntity<List<BookDTO>> getByAuthor(@PathVariable("author") String author) {
+        log.info("starting controller - getByAuthor");
         return ResponseEntity.ok(service.findByAuthor(author));
     }
 
     @GetMapping("/recents")
     public ResponseEntity<List<BookDTO>> getRecents() throws JsonProcessingException {
+        log.info("starting controller - getRecents");
         return ResponseEntity.ok(service.findMostRecents());
     }
 }

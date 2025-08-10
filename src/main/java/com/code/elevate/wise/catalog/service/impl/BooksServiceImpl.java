@@ -6,19 +6,15 @@ import com.code.elevate.wise.catalog.exception.NotFoundException;
 import com.code.elevate.wise.catalog.mapper.BooksMapper;
 import com.code.elevate.wise.catalog.repository.BooksRepository;
 import com.code.elevate.wise.catalog.service.BooksService;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.management.RuntimeErrorException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,10 +32,12 @@ public class BooksServiceImpl implements BooksService {
     @Override
     public List<BookDTO> findAllBooks(int page, int pageSize) throws JsonProcessingException {
         if (redis.hasKey("list")) {
+            log.info("getting the book - redis [findAllBooks]");
             String redisObject = (String) redis.opsForValue().get("list");
             JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
             return objectMapper.readValue(redisObject, type);
         } else {
+            log.info("getting the book - database");
             List<BookEntity> listOfBooks = repository.findAll(PageRequest.of(page, pageSize)).getContent();
             if (listOfBooks.isEmpty()) {
                 throw new NotFoundException("no book was found");
@@ -62,6 +60,7 @@ public class BooksServiceImpl implements BooksService {
         BookDTO bookDTO = mapper.toDTO(optionalBook.get());
         redis.expire(id, 5, TimeUnit.MINUTES);
         if (redis.hasKey("recents")) {
+            log.info("adding in recents - redis [findById]");
             String redisObject = (String) redis.opsForValue().get("recents");
             JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
             List<BookDTO> recentsList = objectMapper.readValue(redisObject, type);
@@ -69,6 +68,7 @@ public class BooksServiceImpl implements BooksService {
             String initialRecents = objectMapper.writeValueAsString(recentsList);
             redis.opsForValue().set("recents", initialRecents);
         } else {
+            log.info("creating recents - redis [findById]");
             List<BookDTO> initialList = List.of(bookDTO);
             String initialRecents = objectMapper.writeValueAsString(initialList);
             redis.opsForValue().set("recents", initialRecents);
@@ -78,10 +78,12 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public List<BookDTO> findByGenre(String genre) {
+
         Optional<List<BookEntity>> optionalBook = repository.findByGenre(genre);
         if (optionalBook.isEmpty() || optionalBook.map(List::isEmpty).orElse(false)) {
             throw new NotFoundException("no book with the " + genre + " genre was found");
         }
+        log.info("found in the database [findByGenre]");
         List<BookDTO> dtoResponse = new ArrayList<>(optionalBook.get().size());
         optionalBook.get().forEach(entity -> dtoResponse.add(mapper.toDTO(entity)));
         return dtoResponse;
@@ -89,10 +91,12 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public List<BookDTO> findByAuthor(String author) {
+
         Optional<List<BookEntity>> optionalBook = repository.findByAuthor(author);
         if (optionalBook.isEmpty() || optionalBook.map(List::isEmpty).orElse(false)) {
             throw new NotFoundException("no book with the author named " + author + " was found");
         }
+        log.info("found in the database [findByAuthor]");
         List<BookDTO> dtoResponse = new ArrayList<>(optionalBook.get().size());
         optionalBook.get().forEach(entity -> dtoResponse.add(mapper.toDTO(entity)));
         return dtoResponse;
@@ -100,6 +104,7 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public List<BookDTO> findMostRecents() throws JsonProcessingException {
+        log.info("getting the book - redis [findMostRecents]");
         String redisObject = (String) redis.opsForValue().get("recents");
         JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
         return objectMapper.readValue(redisObject, type);

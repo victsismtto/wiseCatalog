@@ -31,7 +31,6 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
         GENRE_LIST.forEach(element -> {
             Mono<SubjectDTO> response = client.getSubjectJson(element);
             List<BookEntity> bookEntities = getEntityList(response).collectList().block();
-            log.info(bookEntities);
             if (bookEntities != null && !bookEntities.isEmpty())  {
                 repository.saveAll(bookEntities);
             }
@@ -40,6 +39,7 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
 
     @Override
     public void deleteListOfBooks() {
+        log.info("deleting the books");
         repository.deleteAll();
     }
 

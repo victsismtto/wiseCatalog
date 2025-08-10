@@ -19,12 +19,14 @@ public class OpenLibraryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createAllBooks()  {
+        log.info("starting controller - createAllBooks");
         service.createListOfBooks();
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAllBooks()  {
+        log.info("starting controller - deleteAllBooks");
         service.deleteListOfBooks();
         return ResponseEntity.ok().build();
     }
