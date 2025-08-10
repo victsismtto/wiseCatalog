@@ -11,4 +11,5 @@ public interface BooksService {
     BookDTO findById(String id) throws JsonProcessingException;
     List<BookDTO> findByGenre(String genre);
     List<BookDTO> findByAuthor(String author);
+    List<BookDTO> findMostRecents() throws JsonProcessingException;
 }

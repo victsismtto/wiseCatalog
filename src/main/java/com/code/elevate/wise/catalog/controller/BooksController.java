@@ -38,4 +38,9 @@ public class BooksController {
     public ResponseEntity<List<BookDTO>> getByAuthor(@PathVariable("author") String author){
         return ResponseEntity.ok(service.findByAuthor(author));
     }
+
+    @GetMapping("/recents")
+    public ResponseEntity<List<BookDTO>> getRecents() throws JsonProcessingException {
+        return ResponseEntity.ok(service.findMostRecents());
+    }
 }

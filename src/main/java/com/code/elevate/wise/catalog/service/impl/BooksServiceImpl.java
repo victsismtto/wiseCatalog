@@ -55,21 +55,25 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public BookDTO findById(String id) throws JsonProcessingException {
-        if (redis.hasKey(id)) {
-            String redisObject = (String) redis.opsForValue().get(id);
-            JavaType type = objectMapper.getTypeFactory().constructType(BookDTO.class);
-            return objectMapper.readValue(redisObject, type);
-        } else {
-            Optional<BookEntity> optionalBook = repository.findById(id);
-            if (optionalBook.isEmpty()) {
-                throw new NotFoundException("book id " + id + " was not found");
-            }
-            BookDTO bookDTO = mapper.toDTO(optionalBook.get());
-            String value = objectMapper.writeValueAsString(bookDTO);
-            redis.opsForValue().set(id, value);
-            redis.expire(id, 5, TimeUnit.MINUTES);
-            return bookDTO;
+        Optional<BookEntity> optionalBook = repository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new NotFoundException("book id " + id + " was not found");
         }
+        BookDTO bookDTO = mapper.toDTO(optionalBook.get());
+        redis.expire(id, 5, TimeUnit.MINUTES);
+        if (redis.hasKey("recents")) {
+            String redisObject = (String) redis.opsForValue().get("recents");
+            JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
+            List<BookDTO> recentsList = objectMapper.readValue(redisObject, type);
+            recentsList.add(bookDTO);
+            String initialRecents = objectMapper.writeValueAsString(recentsList);
+            redis.opsForValue().set("recents", initialRecents);
+        } else {
+            List<BookDTO> initialList = List.of(bookDTO);
+            String initialRecents = objectMapper.writeValueAsString(initialList);
+            redis.opsForValue().set("recents", initialRecents);
+        }
+        return bookDTO;
     }
 
     @Override
@@ -92,5 +96,12 @@ public class BooksServiceImpl implements BooksService {
         List<BookDTO> dtoResponse = new ArrayList<>(optionalBook.get().size());
         optionalBook.get().forEach(entity -> dtoResponse.add(mapper.toDTO(entity)));
         return dtoResponse;
+    }
+
+    @Override
+    public List<BookDTO> findMostRecents() throws JsonProcessingException {
+        String redisObject = (String) redis.opsForValue().get("recents");
+        JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
+        return objectMapper.readValue(redisObject, type);
     }
 }
