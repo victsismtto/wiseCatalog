@@ -11,3 +11,8 @@ spring:
       database: ${MONGO_DB:local}
 server:
   port: ${SERVER_PORT:8080}
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}
