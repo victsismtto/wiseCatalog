@@ -13,5 +13,4 @@ public class BookDTO {
     private String author;
     private int publicationYear;
     private String genre;
-    private String subgenre;
 }

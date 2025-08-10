@@ -11,8 +11,8 @@ public class BooksMapperImpl implements BooksMapper {
     public BookDTO toDTO(BookEntity book) {
         if (book == null) return null;
         return new BookDTO(
-                book.get_id(), book.getTitle(), book.getAuthor(),
-                book.getPublicationYear(), book.getGenre(), book.getSubgenre()
+                book.get_id().toHexString(), book.getTitle(), book.getAuthor(),
+                book.getPublicationYear(), book.getGenre()
         );
     }
 }
