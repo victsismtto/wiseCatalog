@@ -14,8 +14,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class OpenLibraryClient {
 
-    @Autowired
-    private WebClient webClient;
+    @Autowired private WebClient webClient;
 
     public Mono<SubjectDTO> getSubjectJson(String uri) {
         try {
@@ -28,6 +27,5 @@ public class OpenLibraryClient {
         } catch (Exception e) {
             throw new ServiceUnavailableException("the openTelemetry service is temporally unavailable");
         }
-
     }
 }
