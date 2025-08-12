@@ -1,6 +1,5 @@
-package com.code.elevate.wise.catalog.controller;
+package com.code.elevate.wise.catalog.app.controller;
 
-import com.code.elevate.wise.catalog.app.controller.BooksController;
 import com.code.elevate.wise.catalog.domain.dto.BookDTO;
 import com.code.elevate.wise.catalog.app.service.BooksService;
 import com.fasterxml.jackson.core.JsonProcessingException;

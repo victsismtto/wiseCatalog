@@ -1,4 +1,4 @@
-package com.code.elevate.wise.catalog.mapper;
+package com.code.elevate.wise.catalog.domain.mapper;
 
 import com.code.elevate.wise.catalog.domain.dto.SubjectDTO;
 import com.code.elevate.wise.catalog.domain.entity.BookEntity;

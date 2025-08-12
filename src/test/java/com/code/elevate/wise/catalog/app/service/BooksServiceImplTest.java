@@ -1,4 +1,4 @@
-package com.code.elevate.wise.catalog.service;
+package com.code.elevate.wise.catalog.app.service;
 
 
 import com.code.elevate.wise.catalog.app.repository.BooksRepository;

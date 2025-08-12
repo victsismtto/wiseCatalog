@@ -1,6 +1,5 @@
-package com.code.elevate.wise.catalog.controller;
+package com.code.elevate.wise.catalog.app.controller;
 
-import com.code.elevate.wise.catalog.app.controller.AuthenticationController;
 import com.code.elevate.wise.catalog.domain.dto.AuthenticationDTO;
 import com.code.elevate.wise.catalog.domain.dto.LoginResponseDTO;
 import com.code.elevate.wise.catalog.domain.dto.RegisterDTO;

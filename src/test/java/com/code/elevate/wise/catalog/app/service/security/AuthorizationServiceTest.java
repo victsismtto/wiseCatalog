@@ -1,4 +1,4 @@
-package com.code.elevate.wise.catalog.security;
+package com.code.elevate.wise.catalog.app.service.security;
 
 import com.code.elevate.wise.catalog.app.repository.UserRepository;
 import com.code.elevate.wise.catalog.app.service.security.AuthorizationService;

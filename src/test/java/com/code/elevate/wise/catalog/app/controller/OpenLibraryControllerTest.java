@@ -1,6 +1,5 @@
-package com.code.elevate.wise.catalog.controller;
+package com.code.elevate.wise.catalog.app.controller;
 
-import com.code.elevate.wise.catalog.app.controller.OpenLibraryController;
 import com.code.elevate.wise.catalog.app.service.OpenLibraryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
