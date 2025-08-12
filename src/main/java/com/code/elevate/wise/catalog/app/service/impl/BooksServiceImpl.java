@@ -110,7 +110,7 @@ public class BooksServiceImpl implements BooksService {
         return objectMapper.readValue(redisObject, type);
     }
 
-        private void saveRecentsRedis(BookDTO bookDTO) throws JsonProcessingException {
+    private void saveRecentsRedis(BookDTO bookDTO) throws JsonProcessingException {
         log.info("creating recents - redis [findById]");
         List<BookDTO> initialList = List.of(bookDTO);
         String initialRecents = objectMapper.writeValueAsString(initialList);
