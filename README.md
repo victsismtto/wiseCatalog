@@ -9,18 +9,18 @@
 
 ## Sumário
 
-- [Visão Geral](#visão-geral)
+- [Introdução](#introdução)
 - [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Design Pattern](#design-pattern)
-- [Como Executar](#como-executar)
-    - [Localmente/Docker](#localmente)
-- [API Endpoints](#api-endpoints)
-- [Melhorias e Considerações finais](#melhorias) 
+- [Tecnologias utilizadas](#tecnologias-utilizadas)
+- [Design pattern](#design-pattern)
+- [Como executar](#como-executar)
+  - [Localmente](#localmente)
+- [API endpoints](#endpoints)
+- [Melhorias e considerações finais](#melhorias-e-considerações-finais)
 
 ---
 
-## Visão Geral
+## Introdução
 
 O wiseCatalog é um serviço que facilita a busca e a consulta de dados sobre livros no catálogo da API OpenBook.
 A API permite pesquisas por critérios como ID, título, autor, gênero e livros mais recentes, retornando as respostas
