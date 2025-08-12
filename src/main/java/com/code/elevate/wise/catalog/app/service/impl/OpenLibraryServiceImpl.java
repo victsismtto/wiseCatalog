@@ -8,6 +8,7 @@ import com.code.elevate.wise.catalog.app.repository.BooksRepository;
 import com.code.elevate.wise.catalog.app.service.OpenLibraryService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,6 +25,7 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
     @Autowired private OpenLibraryClient client;
     @Autowired private BooksRepository repository;
     @Autowired private OpenLibraryMapper mapper;
+    @Autowired RedisTemplate<String, Object> redis;
     private static final  List<String> GENRE_LIST = List.of("triller.json", "comedy.json", "romance.json", "action.json", "fantasy.json");
     @Override
     public void createListOfBooks() {
@@ -40,6 +42,8 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
     public void deleteListOfBooks() {
         log.info("deleting the books");
         repository.deleteAll();
+        assert redis.getConnectionFactory() != null;
+        redis.getConnectionFactory().getConnection().flushDb();
     }
 
     private Flux<BookEntity> getEntityList(Mono<SubjectDTO> subjectDTOMono) {
