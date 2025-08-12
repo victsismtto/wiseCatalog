@@ -104,6 +104,7 @@ public class BooksServiceImpl implements BooksService {
         List<BookDTO> initialList = List.of(bookDTO);
         String initialRecents = objectMapper.writeValueAsString(initialList);
         redis.opsForValue().set("recents", initialRecents);
+        redis.expire("recents", 60, TimeUnit.MINUTES);
     }
 
     private void updateRecentsRedis(BookDTO bookDTO) throws JsonProcessingException {
@@ -116,6 +117,7 @@ public class BooksServiceImpl implements BooksService {
             recentsList.add(bookDTO);
             String initialRecents = objectMapper.writeValueAsString(recentsList);
             redis.opsForValue().set("recents", initialRecents);
+            redis.expire("recents", 60, TimeUnit.MINUTES);
         }
     }
 
