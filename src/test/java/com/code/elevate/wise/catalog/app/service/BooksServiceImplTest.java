@@ -48,12 +48,11 @@ public class BooksServiceImplTest {
     }
 
     @Test
-    void findAllBooksNoRedisTest() throws JsonProcessingException {
+    void findAllBooksTest() throws JsonProcessingException {
         BookEntity entity = buildEntity();
         Page<BookEntity> page = new PageImpl<>(List.of(entity));
         BookDTO bookDTO = buildDTO();
         when(mapper.toDTO(entity)).thenReturn(bookDTO);
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(repository.findAll(PageRequest.of(0, 10))).thenReturn(page);
         List<BookDTO> bookDTOS = service.findAllBooks(0, 10);
         assertEquals(bookDTOS, List.of(bookDTO));
@@ -61,23 +60,11 @@ public class BooksServiceImplTest {
 
     @Test
     void findAllBooksErrorTest() {
-        when(redisTemplate.hasKey(any())).thenReturn(false);
         Page<BookEntity> page = new PageImpl<>(List.of());
         when(repository.findAll(PageRequest.of(0, 10))).thenReturn(page);
         Assertions.assertThrows(NotFoundException.class, () -> service.findAllBooks(0, 10));
     }
 
-    @Test
-    void findAllBooksRedisTest() throws IOException {
-        BookDTO bookDTO = buildDTO();
-        when(redisTemplate.hasKey(any())).thenReturn(true);
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        String jsonFromRedis = jsonString();;
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(valueOperations.get(any())).thenReturn(jsonFromRedis);
-        List<BookDTO> bookDTOS = service.findAllBooks(0, 10);
-        assertEquals(bookDTOS, List.of(bookDTO));
-    }
 
     @Test
     void findByIdNoRedisTest() throws JsonProcessingException {
@@ -145,11 +132,19 @@ public class BooksServiceImplTest {
 
     @Test
     void findMostRecents() throws Exception {
+        when(redisTemplate.hasKey(any())).thenReturn(true);
         String jsonFromRedis = jsonString();
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(valueOperations.get(any())).thenReturn(jsonFromRedis);
         List<BookDTO> list = service.findMostRecents();
         Assertions.assertEquals("JKR", list.get(0).getAuthor());
+    }
+
+    @Test
+    void findMostRecentsEmpty() throws Exception {
+        when(redisTemplate.hasKey(any())).thenReturn(false);
+        List<BookDTO> list = service.findMostRecents();
+        Assertions.assertEquals(list, List.of());
     }
 
     private BookEntity buildEntity() {
