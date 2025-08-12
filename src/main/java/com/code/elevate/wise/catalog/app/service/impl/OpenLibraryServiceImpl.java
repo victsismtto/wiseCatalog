@@ -42,7 +42,6 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
     public void deleteListOfBooks() {
         log.info("deleting the books");
         repository.deleteAll();
-        assert redis.getConnectionFactory() != null;
         redis.getConnectionFactory().getConnection().flushDb();
     }
 
