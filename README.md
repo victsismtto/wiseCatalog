@@ -16,7 +16,6 @@
 - [Como Executar](#como-executar)
     - [Localmente/Docker](#localmente)
 - [API Endpoints](#api-endpoints)
-- [Contribuições](#contribuições)
 - [Melhorias e Considerações finais](#melhorias) 
 
 ---
@@ -30,9 +29,40 @@ no formato JSON.
 ## Funcionalidades
 
 - Pesquisa por parâmetros como ID, título, autor, gênero e livros mais recentes.
+- Possui configuracao de login para que apenas usuarios autenticados e autorizados consigam acessar os endpoints de busca.
 - Integração com MongoDB para armazenamento persistente.
 - Cache em Redis para otimizar consultas.
 - Deploy facilitado com Docker e Docker Compose.
+
+## Endpoints
+
+Registro e login
+Para possuir acesso aos endpoints, é necessário criar um registro. Path e body da request (JSON):
+
+    POST /ce-wise-catalog/auth/register - Deve ser enviado um body em formato raw JSON
+
+    {
+    "login": "victor",
+    "password": "pass1",
+    "role": "ADMIN" //ADMIN ou USER
+    }
+
+Depois, para pegar um token e acessar todos os endpoints por uma hora com eles, chamar o login. Path e body da request (JSON):
+
+    POST /ce-wise-catalog/auth/login - Logar no sistema Deve ser enviado o um body em raw json
+    {
+    "login": "victor",
+    "password": "pass1"
+    }
+
+Consultas (as requisições precisam do token retornado no endpoint de login)
+
+    GET /books?page=0&pageSize=10 - Retorna todos os livros cadastrados
+    GET /books/author/{author} - Retorna todos os livros do autor informado
+    GET /books/genre/{genre} - Retorna todos os livros por gênero
+    GET /books/{id} - Retorna um livro por ID
+    GET /books/recently - Retorna os últimos livros acessados (do retorno por id)
+
 
 ## Tecnologias Utilizadas
 
@@ -159,13 +189,14 @@ Container:
 Imagens:
 ![images.png](images/images.png)
 
-## Melhorias
+## Melhorias e Considerações finais
 
 - Poderia ser adicionada uma consulta para verificar a disponibilidade de compra do livro, mostrando a quantidade disponível no estoque.
 - Implementar um limite no tamanho do cache para a consulta dos livros mais recentemente visualizados.
 - Caso o projeto seja hospedado na internet, por exemplo, na Azure, as secrets deveriam ser armazenadas em um Key Vault e espelhadas no pod para garantir a proteção delas.
 - Adicionar certificado de transporte seguro e assinatura digital caso sejam criados endpoints para compras online.
 - Utilizar uma varredura em batch para incluir novos livros ou atualizar as quantidades disponíveis conforme o estoque.
+- Criei um endpoint interno para deletar os livros e limpar o cache, faltou implementar uma configuração que apenas usuários com role ADMIN possa acessar esse endpoint.
 
 ## Author
 
