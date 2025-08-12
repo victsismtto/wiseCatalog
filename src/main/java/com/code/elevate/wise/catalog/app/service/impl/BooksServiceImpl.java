@@ -93,10 +93,9 @@ public class BooksServiceImpl implements BooksService {
             String redisObject = (String) redis.opsForValue().get("recents");
             JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
             return objectMapper.readValue(redisObject, type);
-        } else {
-            log.info("there is no new fetch yet");
-            return List.of();
         }
+        log.info("there is no new fetch yet");
+        return List.of();
     }
 
     private void saveRecentsRedis(BookDTO bookDTO) throws JsonProcessingException {
