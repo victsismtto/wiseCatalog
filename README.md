@@ -12,10 +12,12 @@
 - [Visão Geral](#visão-geral)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Design Pattern](#design-pattern)
 - [Como Executar](#como-executar)
     - [Localmente/Docker](#localmente)
 - [API Endpoints](#api-endpoints)
 - [Contribuições](#contribuições)
+- [Melhorias e Considerações finais](#melhorias) 
 
 ---
 
@@ -40,6 +42,21 @@ no formato JSON.
 - **Redis** (cache)
 - **Maven** (gerenciamento de dependências)
 - **Docker** e **Docker Compose** (deploy)
+
+## Design-pattern
+
+Para organizar melhor o projeto, utilizei uma arquitetura baseada no padrão de design MVC (Model-View-Controller), com pequenas adaptações para a estruturação das pastas e com ausência da camada View.
+- O MVC (Model-View-Controller) é um padrão de arquitetura para organizar aplicações em três camadas principais:
+  Model (Modelo): representa os dados e a lógica de negócio da aplicação.
+  View (Visão): é a interface com o usuário, responsável por exibir os dados.
+  Controller (Controlador): atua como intermediário, recebendo as entradas do usuário, processando-as via Model e atualizando a View.
+
+Esse padrão ajuda a separar responsabilidades, tornando o código mais organizado, modular e fácil de manter.
+- Existem três pastas principais: domain, app e infra.
+- Na pasta domain, ficam os mappers, entidades, DTOs e exceções.
+- Na pasta infra, ficam as chamadas externas e configurações.
+- Na pasta app, estão os controllers, services, repositories e components.
+- Embora não seja uma organização tradicional do padrão MVC, aproveito a simplicidade e praticidade desse modelo para estruturar as pastas, facilitando a localização das classes de acordo com o seu escopo de atuação nas pastas raiz.
 
 ## Como Executar
 
@@ -141,6 +158,14 @@ Container:
 
 Imagens:
 ![images.png](images/images.png)
+
+## Melhorias
+
+- Poderia ser adicionada uma consulta para verificar a disponibilidade de compra do livro, mostrando a quantidade disponível no estoque.
+- Implementar um limite no tamanho do cache para a consulta dos livros mais recentemente visualizados.
+- Caso o projeto seja hospedado na internet, por exemplo, na Azure, as secrets deveriam ser armazenadas em um Key Vault e espelhadas no pod para garantir a proteção delas.
+- Adicionar certificado de transporte seguro e assinatura digital caso sejam criados endpoints para compras online.
+- Utilizar uma varredura em batch para incluir novos livros ou atualizar as quantidades disponíveis conforme o estoque.
 
 ## Author
 
