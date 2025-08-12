@@ -55,7 +55,7 @@ Depois, para pegar um token e acessar todos os endpoints por uma hora com eles, 
     "password": "pass1"
     }
 
-Consultas (as requisições precisam do token retornado no endpoint de login)
+Consultas (as requisições precisam do token retornado no endpoint de login):
 
     GET /books?page=0&pageSize=10 - Retorna todos os livros cadastrados
     GET /books/author/{author} - Retorna todos os livros do autor informado
@@ -120,11 +120,11 @@ Opcionais:
 - Clique no menu File (canto superior esquerdo do IntelliJ) e selecione Settings.
 - No macOS, o caminho pode variar, mas a opção Settings será a mesma.
 - Acesse Build, Execution, Deployment → Maven.
-- No campo "Maven home path" podemos selecionar a pasta que esta localizado o maven ou selecionar o maven instalado nos plugins do próprio IntelliJ selecionando a opção Bundled (Maven 3) caso o maven seja da versao 3.9
+- No campo "Maven home path" podemos selecionar a pasta que esta localizado o maven ou selecionar o maven instalado nos plugins do próprio IntelliJ selecionando a opção Bundled (Maven 3) caso o maven seja da versao 3.9.
 - Nos campos "User Settings File" e "Maven repository", selecionar a pasta .../.m2/repository, caso não possua esta pasta, ela pode ser localizada em Users/seu usuario/.m2 (ela fica oculta, geralmente).
-- Selecione nos dois campos a opção "Override"
+- Selecione nos dois campos a opção "Override".
 -  Repita o mesmo procedimento para o arquivo settings.xml (mesma hierarquia de pastas e configuração).
-- Apertar Apply e depois OK
+- Apertar Apply e depois OK.
 
 ![settings.png](images/settings.png)
 
@@ -167,7 +167,7 @@ Exemplo:
 
 ![pom.png](images/pom.png)
 
-- Depois de buildar o projeto, repare no console do terminal: gerou o .jar com a versão do projeto
+- Depois de realizar o build o projeto, no console do terminal: gerou o .jar com a versão do projeto
 
 ![build.png](images/build.png)
 
@@ -178,10 +178,10 @@ Exemplo:
 - Após seguir as configurações, estamos prontos para criar a imagem do projeto e subir ele no container.
 - Para isso, vamos executar o comando: "docker compose up --build" no terminal, dentro da pasta do projeto.
 - Pode rodar o docker direto na IDE com botão de run caso baixe a o plugin do docker no IntelliJ.
-- Lembrando que parar subir em sistemas Windows, deve ter o Docker Desktop instalado para rodar comandos docker.
+- Lembrando que parar subir em sistemas Windows, deve ter o Docker ou rancher Desktop, por exemplo, instalado para rodar comandos docker.
 
-- O Docker compose vai identificar quais dependências que o seu projeto tem, no caso, o mongoDB e o Redis, após identificar as dependências e vai baixar as imagens nas versões explicitadas no docker-compose.yml
-- Após o build do docker compose terminar, as imagens do redis, mongoDB e ce-wise-catalog estarão criadas no container, sendo visíveis no Docker Desktop
+- O Docker compose vai identificar quais dependências que o seu projeto tem, no caso, o mongoDB e o Redis, após identificar as dependências e vai baixar as imagens nas versões explicitadas no docker-compose.yml.
+- Após o build do docker compose terminar, as imagens do redis, mongoDB e ce-wise-catalog estarão criadas no container, sendo visíveis no Docker Desktop.
 
 Container:
 ![containers.png](images/containers.png)
