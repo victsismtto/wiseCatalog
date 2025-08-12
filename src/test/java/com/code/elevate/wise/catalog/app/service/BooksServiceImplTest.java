@@ -65,6 +65,16 @@ public class BooksServiceImplTest {
         Assertions.assertThrows(NotFoundException.class, () -> service.findAllBooks(0, 10));
     }
 
+    @Test
+    void findByIdRedisTest() throws JsonProcessingException {
+        BookDTO dto = buildDTO();
+        when(redisTemplate.hasKey(any())).thenReturn(true);
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        when(valueOperations.get(any())).thenReturn(jsonStringDTO());
+        BookDTO bookDTO = service.findById("1");
+        assertEquals(bookDTO, dto);
+    }
+
 
     @Test
     void findByIdNoRedisTest() throws JsonProcessingException {
@@ -90,9 +100,10 @@ public class BooksServiceImplTest {
         BookDTO dto = buildDTO();
         when(repository.findById("1")).thenReturn(Optional.of(entity));
         when(mapper.toDTO(entity)).thenReturn(dto);
-        when(redisTemplate.hasKey(any())).thenReturn(true);
+        when(redisTemplate.hasKey("1")).thenReturn(false);
+        when(redisTemplate.hasKey("recents")).thenReturn(true);
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        String jsonFromRedis = jsonString();
+        String jsonFromRedis = jsonStringList();
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(valueOperations.get(any())).thenReturn(jsonFromRedis);
         BookDTO response = service.findById("1");
@@ -133,7 +144,7 @@ public class BooksServiceImplTest {
     @Test
     void findMostRecents() throws Exception {
         when(redisTemplate.hasKey(any())).thenReturn(true);
-        String jsonFromRedis = jsonString();
+        String jsonFromRedis = jsonStringList();
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(valueOperations.get(any())).thenReturn(jsonFromRedis);
         List<BookDTO> list = service.findMostRecents();
@@ -165,7 +176,7 @@ public class BooksServiceImplTest {
         return dto;
     }
 
-    private String jsonString() {
+    private String jsonStringList() {
         return "[ {\n" +
                 "  \"id\" : \"1\",\n" +
                 "  \"author\" : \"JKR\",\n" +
@@ -173,5 +184,15 @@ public class BooksServiceImplTest {
                 "  \"author\" : \"JKR\",\n" +
                 "  \"title\": \"Harry Potter\"\n" +
                 "} ]";
+    }
+
+    private String jsonStringDTO() {
+        return "{\n" +
+                "  \"id\" : \"1\",\n" +
+                "  \"author\" : \"JKR\",\n" +
+                "  \"genre\" : \"Fantasy\",\n" +
+                "  \"author\" : \"JKR\",\n" +
+                "  \"title\": \"Harry Potter\"\n" +
+                "}";
     }
 }

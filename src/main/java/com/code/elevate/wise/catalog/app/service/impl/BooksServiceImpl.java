@@ -43,24 +43,27 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public BookDTO findById(String id) throws JsonProcessingException {
+        if (redis.hasKey(id)) {
+            String redisObject = (String) redis.opsForValue().get(id);
+            JavaType type = objectMapper.getTypeFactory().constructType(BookDTO.class);
+            return objectMapper.readValue(redisObject, type);
+        }
         Optional<BookEntity> optionalBook = repository.findById(id);
         if (optionalBook.isEmpty()) {
             throw new NotFoundException("book id " + id + " was not found");
         }
         BookDTO bookDTO = mapper.toDTO(optionalBook.get());
-        redis.expire(id, 5, TimeUnit.MINUTES);
         if (redis.hasKey("recents")) {
             updateRecentsRedis(bookDTO);
         } else {
             saveRecentsRedis(bookDTO);
         }
-        verifyAndSaveRedisById(bookDTO);
+        saveCacheById(bookDTO);
         return bookDTO;
     }
 
     @Override
     public List<BookDTO> findByGenre(String genre) {
-
         Optional<List<BookEntity>> optionalBook = repository.findByGenre(genre);
         if (optionalBook.isEmpty() || optionalBook.map(List::isEmpty).orElse(false)) {
             throw new NotFoundException("no book with the " + genre + " genre was found");
@@ -73,7 +76,6 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public List<BookDTO> findByAuthor(String author) {
-
         Optional<List<BookEntity>> optionalBook = repository.findByAuthor(author);
         if (optionalBook.isEmpty() || optionalBook.map(List::isEmpty).orElse(false)) {
             throw new NotFoundException("no book with the author named " + author + " was found");
@@ -95,7 +97,6 @@ public class BooksServiceImpl implements BooksService {
             log.info("there is no new fetch yet");
             return List.of();
         }
-
     }
 
     private void saveRecentsRedis(BookDTO bookDTO) throws JsonProcessingException {
@@ -110,9 +111,7 @@ public class BooksServiceImpl implements BooksService {
         String redisObject = (String) redis.opsForValue().get("recents");
         JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, BookDTO.class);
         List<BookDTO> recentsList = objectMapper.readValue(redisObject, type);
-        Optional<BookDTO> duplicate = recentsList.stream()
-                .filter(book -> book.getId().equals(bookDTO.getId()))
-                .findFirst();
+        Optional<BookDTO> duplicate = recentsList.stream().filter(book -> book.getId().equals(bookDTO.getId())).findFirst();
         if (duplicate.isEmpty()) {
             recentsList.add(bookDTO);
             String initialRecents = objectMapper.writeValueAsString(recentsList);
@@ -120,9 +119,8 @@ public class BooksServiceImpl implements BooksService {
         }
     }
 
-    private void verifyAndSaveRedisById(BookDTO bookDTO) throws JsonProcessingException {
-        if (!redis.hasKey(bookDTO.getId())) {
-            redis.opsForValue().set(bookDTO.getId(), objectMapper.writeValueAsString(bookDTO));
-        }
+    private void saveCacheById(BookDTO bookDTO) throws JsonProcessingException {
+        redis.opsForValue().set(bookDTO.getId(), objectMapper.writeValueAsString(bookDTO));
+        redis.expire(bookDTO.getId(), 5, TimeUnit.MINUTES);
     }
 }
