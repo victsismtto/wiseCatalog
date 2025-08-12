@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.code.elevate</groupId>
 	<artifactId>wise.catalog</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<name>wise-catalog</name>
 	<description>API Rest for books searching</description>
 	<url/>
