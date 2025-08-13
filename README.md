@@ -200,7 +200,7 @@ Exemplo:
 
 ![build.png](images/build.png)
 
-- E no arquivo "Dockerfile" devemos adicionar o path que o .jar está localizado com a mesma versão que o projeto foi construído
+- E no arquivo "Dockerfile" devemos adicionar o path que o .jar está localizado com a mesma versão que o projeto foi construído.
 
 ![dockerfile.png](images/dockerfile.png)
 
