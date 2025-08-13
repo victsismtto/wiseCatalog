@@ -13,6 +13,7 @@
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias utilizadas](#tecnologias-utilizadas)
 - [Design pattern](#design-pattern)
+- [Estrutura de dados](estrutura-dados)
 - [Como executar](#como-executar)
   - [Localmente](#localmente)
 - [API endpoints](#endpoints)
@@ -88,6 +89,34 @@ Esse padrão ajuda a separar responsabilidades, tornando o código mais organiza
 - Na pasta app, estão os controllers, services, repositories e components.
 - Embora não seja uma organização tradicional do padrão MVC, aproveito a simplicidade e praticidade desse modelo para estruturar as pastas, facilitando a localização das classes de acordo com o seu escopo de atuação nas pastas raiz.
 
+## Estrutura de dados
+- O BookDTO é uma classe simples utilizada para transportar dados entre diferentes camadas da aplicação, controller e o serviço. Ele contém apenas os campos necessários para a troca de informações para os GETs da API. Representa o dado de forma simplificada e desacoplada da persistência.
+- O uso de DTOs permite expor apenas os campos relevantes nas respostas da API, mantendo a estrutura interna (BookEntity) protegida e adaptável a mudanças no banco sem quebrar contratos externos.
+
+
+    private String id;
+    private String title;
+    private String author;
+    private int publicationYear;
+    private String genre;
+
+- O BookEntity, por outro lado, representa a entidade persistida no banco de dados
+- Ela está anotada com @Document(collection = "books"), o que indica que o MongoDB irá armazenar os documentos dessa classe na coleção books. O campo _id é marcado com @Id e mapeado para o campo _id no documento BSON do Mongo, usando ObjectId como tipo, o que é comum em bancos NoSQL para garantir unicidade e eficiência de indexação.
+
+- No contexto de um banco NoSQL como o MongoDB:
+
+
+    private ObjectId _id;
+    private String title;
+    private String author;
+    private int publicationYear;
+    private String genre;
+
+- Não há a rigidez de esquemas típica de bancos relacionais, ou seja, documentos da mesma coleção podem ter campos diferentes sem causar erros.
+- A serialização e desserialização entre BookEntity e o documento no MongoDB é feita automaticamente pelo Spring Data MongoDB, respeitando as anotações (@Document, @Field, @Id).
+
+- Em resumo: o DTO simplifica e controla o tráfego de dados, enquanto a Entity representa a estrutura persistida no MongoDB, aproveitando a flexibilidade do NoSQL para armazenar dados sem necessidade de schema fixo e com capacidade de evolução rápida.
+
 ## Como Executar
 
 ### Pré-requisitos
@@ -123,7 +152,7 @@ Opcionais:
 - No campo "Maven home path" podemos selecionar a pasta que esta localizado o maven ou selecionar o maven instalado nos plugins do próprio IntelliJ selecionando a opção Bundled (Maven 3) caso o maven seja da versao 3.9.
 - Nos campos "User Settings File" e "Maven repository", selecionar a pasta .../.m2/repository, caso não possua esta pasta, ela pode ser localizada em Users/seu usuario/.m2 (ela fica oculta, geralmente).
 - Selecione nos dois campos a opção "Override".
--  Repita o mesmo procedimento para o arquivo settings.xml (mesma hierarquia de pastas e configuração).
+- Repita o mesmo procedimento para o arquivo settings.xml (mesma hierarquia de pastas e configuração).
 - Apertar Apply e depois OK.
 
 ![settings.png](images/settings.png)
