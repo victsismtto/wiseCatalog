@@ -2,6 +2,7 @@ package com.code.elevate.wise.catalog.app.component;
 
 import com.code.elevate.wise.catalog.app.repository.UserRepository;
 import com.code.elevate.wise.catalog.app.service.security.AuthenticationService;
+import com.code.elevate.wise.catalog.domain.exception.NotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -26,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = this.recoverToken(request);
         if(token != null){
             String login = authenticationService.validateToken(token);
-            UserDetails user = userRepository.findByLogin(login);
+            UserDetails user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException("Usuário não encontrado: " + login));
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

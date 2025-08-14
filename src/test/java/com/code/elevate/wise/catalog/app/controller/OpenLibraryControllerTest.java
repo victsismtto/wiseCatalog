@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 public class OpenLibraryControllerTest {
 
@@ -16,12 +18,11 @@ public class OpenLibraryControllerTest {
 
     @Test
     void createAllBooksTest() {
-        controller.createAllBooks();
-        Assertions.assertDoesNotThrow(() -> controller.createAllBooks());
+        List<String> genre = List.of("triller", "fantasy");
+        Assertions.assertDoesNotThrow(() -> controller.createAllBooks(genre));
     }
     @Test
     void deleteAllBooksTest() {
-        controller.deleteAllBooks();
         Assertions.assertDoesNotThrow(() -> controller.deleteAllBooks());
     }
 }

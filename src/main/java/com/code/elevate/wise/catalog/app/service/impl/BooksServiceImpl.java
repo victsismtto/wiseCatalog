@@ -48,11 +48,9 @@ public class BooksServiceImpl implements BooksService {
             JavaType type = objectMapper.getTypeFactory().constructType(BookDTO.class);
             return objectMapper.readValue(redisObject, type);
         }
-        Optional<BookEntity> optionalBook = repository.findById(id);
-        if (optionalBook.isEmpty()) {
-            throw new NotFoundException("book id " + id + " was not found");
-        }
-        BookDTO bookDTO = mapper.toDTO(optionalBook.get());
+        BookEntity optionalBook = repository.findById(id).orElseThrow(
+                () -> new NotFoundException("book id " + id + " was not found"));
+        BookDTO bookDTO = mapper.toDTO(optionalBook);
         if (redis.hasKey("recents")) {
             updateRecentsRedis(bookDTO);
         } else {

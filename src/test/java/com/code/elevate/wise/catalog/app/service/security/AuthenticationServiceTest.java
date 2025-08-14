@@ -17,8 +17,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.net.URI;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -71,7 +76,7 @@ class AuthenticationServiceTest {
     @Test
     void register_shouldReturnBadRequest_whenUserAlreadyExists() {
         RegisterDTO dto = new RegisterDTO("user", "pass", UserRole.ADMIN);
-        when(repository.findByLogin("user")).thenReturn(new UserEntity());
+        when(repository.findByLogin("user")).thenReturn(Optional.of(new UserEntity()));
 
         ResponseEntity<?> response = service.register(dto);
 
@@ -80,16 +85,20 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void register_shouldSaveUserAndReturnCreated_whenUserDoesNotExist() {
-        RegisterDTO dto = new RegisterDTO("newuser", "pass", UserRole.ADMIN);
+    void register_shouldSaveUserAndReturnCreated_whenUserExists() {
+        RegisterDTO dto = new RegisterDTO("user2", "password", UserRole.ADMIN);
+        when(repository.findByLogin("user2")).thenReturn(Optional.empty());
 
-        when(repository.findByLogin("newuser")).thenReturn(null);
-        when(repository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        ResponseEntity<Void> response = service.register(dto);
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
+        assertThat(response.getHeaders().getLocation()).isEqualTo(URI.create("/auth/register"));
+        verify(repository, times(1)).save(argThat(user -> {
+            assertThat(user.getLogin()).isEqualTo("user2");
+            assertThat(new BCryptPasswordEncoder().matches("password", user.getPassword())).isTrue();
 
-        ResponseEntity<?> response = service.register(dto);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        verify(repository).save(any(UserEntity.class));
+            assertThat(user.getRole()).isEqualTo(UserRole.ADMIN);
+            return true;
+        }));
     }
 }
 

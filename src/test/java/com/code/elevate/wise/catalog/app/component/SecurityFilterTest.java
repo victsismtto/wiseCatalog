@@ -33,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -75,7 +76,7 @@ class SecurityFilterTest {
 
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         when(tokenService.validateToken(token)).thenReturn(login);
-        when(userRepository.findByLogin(login)).thenReturn(userDetails);
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(userDetails));
         when(userDetails.getAuthorities()).thenReturn(java.util.Collections.emptyList());
 
         // Act

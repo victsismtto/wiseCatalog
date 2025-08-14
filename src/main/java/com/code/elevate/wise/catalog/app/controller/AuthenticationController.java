@@ -5,6 +5,8 @@ import com.code.elevate.wise.catalog.domain.dto.LoginResponseDTO;
 import com.code.elevate.wise.catalog.domain.dto.RegisterDTO;
 import com.code.elevate.wise.catalog.app.repository.UserRepository;
 import com.code.elevate.wise.catalog.app.service.security.AuthenticationService;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data){
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data){
         return service.register(data);
     }
 }

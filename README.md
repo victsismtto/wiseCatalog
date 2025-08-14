@@ -40,7 +40,7 @@ no formato JSON.
 Registro e login
 Para possuir acesso aos endpoints, é necessário criar um registro. Path e body da request (JSON):
 
-    POST /ce-wise-catalog/auth/register - Deve ser enviado um body em formato raw JSON
+    POS /auth/register - Deve ser enviado um body em formato raw JSON
 
     {
     "login": "victor",
@@ -50,7 +50,7 @@ Para possuir acesso aos endpoints, é necessário criar um registro. Path e body
 
 Depois, para pegar um token e acessar todos os endpoints por uma hora com eles, chamar o login. Path e body da request (JSON):
 
-    POST /ce-wise-catalog/auth/login - Logar no sistema Deve ser enviado o um body em raw json
+    POST /auth/login - Logar no sistema Deve ser enviado o um body em raw json
     {
     "login": "victor",
     "password": "pass1"
@@ -200,7 +200,7 @@ Exemplo:
 
 ![build.png](images/build.png)
 
-- E no arquivo "Dockerfile" devemos adicionar o path que o .jar está localizado com a mesma versão que o projeto foi construído
+- E no arquivo "Dockerfile" devemos adicionar o path que o .jar está localizado com a mesma versão que o projeto foi construído.
 
 ![dockerfile.png](images/dockerfile.png)
 
@@ -210,7 +210,7 @@ Exemplo:
 - Lembrando que parar subir em sistemas Windows, deve ter o Docker ou rancher Desktop, por exemplo, instalado para rodar comandos docker.
 
 - O Docker compose vai identificar quais dependências que o seu projeto tem, no caso, o mongoDB e o Redis, após identificar as dependências e vai baixar as imagens nas versões explicitadas no docker-compose.yml.
-- Após o build do docker compose terminar, as imagens do redis, mongoDB e ce-wise-catalog estarão criadas no container, sendo visíveis no Docker Desktop.
+- Após o build do docker compose terminar, as imagens do redis, mongoDB e wise-catalog estarão criadas no container, sendo visíveis no Docker Desktop.
 
 Container:
 ![containers.png](images/containers.png)
