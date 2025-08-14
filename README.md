@@ -40,25 +40,25 @@ no formato JSON.
 Registro e login
 Para possuir acesso aos endpoints, é necessário criar um registro. Path e body da request (JSON):
 
-    POS /auth/register - Deve ser enviado um body em formato raw JSON
+    POS /auth/register - Deve ser enviado um body em formato application/json
 
     {
     "login": "victor",
-    "password": "pass1",
+    "password": "123456",
     "role": "ADMIN" //ADMIN ou USER
     }
 
 Depois, para pegar um token e acessar todos os endpoints por uma hora com eles, chamar o login. Path e body da request (JSON):
 
-    POST /auth/login - Logar no sistema Deve ser enviado o um body em raw json
+    POST /auth/login - Logar no sistema Deve ser enviado o um body em formato application/json
     {
     "login": "victor",
-    "password": "pass1"
+    "password": "123456"
     }
 
 Depois, para criar uma lista, deve chamar o endpoint abaixo:
 
-    POST /openLibrary/create - Logar no sistema Deve ser enviado o um body em raw
+    POST /openLibrary/create - Logar no sistema Deve ser enviado uma lista no body 
     ["triller", "comedy", "romance", "action", "fantasy"]
 
 
@@ -72,7 +72,7 @@ Consultas (as requisições precisam do token retornado no endpoint de login):
 
 Depois, caso necessite, chamar o endpoint abaixo para deletar a lista de livros e limpar o redis:
 
-    DELETE /openLibrary/delete - Logar no sistema Deve ser enviado o um body em raw
+    DELETE /openLibrary/delete
 
 ## Tecnologias Utilizadas
 
@@ -145,6 +145,7 @@ Opcionais:
 - Baixe a IDE (recomendo o **IntelliJ**) para visualização do projeto.
 - Baixe as versões do **JDK** e do **Spring** conforme indicadas na seção **Tecnologias Utilizadas**.
 - Abra o terminal da IDE e digite o comando:
+
     ```bash
     git clone https://github.com/victsismtto/wiseCatalog/tree/develop
 
