@@ -147,7 +147,7 @@ Opcionais:
 - Abra o terminal da IDE e digite o comando:
 
     ```bash
-    git clone https://github.com/victsismtto/wiseCatalog/tree/develop
+    git clone https://github.com/victsismtto/wiseCatalog.git
 
 - Após clonar o repositório, selecione a branch que deseja para testar a API — por exemplo, a versão mais estável: release/1.0.0.
 - Para selecionar a branch desejada, no IntelliJ você pode usar o menu de seleção de branches (dropdown) ou o comando:
@@ -176,7 +176,7 @@ Opcionais:
 
 ![jdk.png](images/jdk.png)
 
-#### Configuração do redis e mongodb
+#### Configuração - redis e mongodb
 - Abra o arquivo docker-compose.yml, pasta se encontra na raiz do projeto.
 - Existe duas configurações de dependencias que o projeto possui (redis e mongoDB).
 
@@ -227,6 +227,8 @@ Container:
 
 Imagens:
 ![images.png](images/images.png)
+
+- A collection e o environment do Postman estão na pasta postman, na raiz do projeto, para que seja possível executar os endpoints da API.
 
 ## Melhorias e Considerações finais
 
