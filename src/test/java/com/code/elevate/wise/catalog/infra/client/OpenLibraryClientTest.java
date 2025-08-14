@@ -1,70 +1,74 @@
 package com.code.elevate.wise.catalog.infra.client;
 
-import com.code.elevate.wise.catalog.domain.dto.SubjectDTO;
 import com.code.elevate.wise.catalog.domain.exception.NotFoundException;
 import com.code.elevate.wise.catalog.domain.exception.ServiceUnavailableException;
-import com.code.elevate.wise.catalog.infra.client.OpenLibraryClient;
-import org.junit.jupiter.api.Assertions;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
 class OpenLibraryClientTest {
 
-    @InjectMocks
+    private MockWebServer server;
     private OpenLibraryClient client;
 
-    @Mock
-    private WebClient webClient;
+    @BeforeEach
+    void setUp() throws Exception {
+        server = new MockWebServer();
+        server.start();
 
-    @Mock
-    private WebClient.RequestHeadersUriSpec<?> uriSpec;
+        String baseUrl = server.url("/").toString();
+        WebClient webClient = WebClient.builder().baseUrl(baseUrl).build();
 
-    @Mock
-    private WebClient.RequestHeadersSpec<?> headersSpec;
+        client = new OpenLibraryClient();
+        ReflectionTestUtils.setField(client, "webClient", webClient);
+    }
 
-    @Mock
-    private WebClient.ResponseSpec responseSpec;
+    @AfterEach
+    void tearDown() throws Exception {
+        server.shutdown();
+    }
 
     @Test
-    void getSubjectJson_shouldReturnMonoSubjectDTO_whenSuccess() {
-        String uri = "fantasy.json";
-        SubjectDTO expectedSubject = new SubjectDTO();
-        expectedSubject.setName("Fantasy");
+    void getSubjectJson_success() {
+        String body = "{\"name\":\"Fantasy\"}";
 
-        // Usando doAnswer para burlar o problema de tipo
-        doAnswer(invocation -> uriSpec).when(webClient).get();
-        doAnswer(invocation -> headersSpec).when(uriSpec).uri(uri);
-        when(headersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(SubjectDTO.class)).thenReturn(Mono.just(expectedSubject));
+        server.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json")
+                .setBody(body));
 
-        StepVerifier.create(client.getSubjectJson(uri))
-                .expectNextMatches(subject -> "Fantasy".equals(subject.getName()))
+        StepVerifier.create(client.getSubjectJson("fantasy.json"))
+                .expectNextMatches(dto -> "Fantasy".equals(dto.getName()))
                 .verifyComplete();
     }
 
     @Test
-    void getSubjectJson_shouldThrowNotFoundException_whenHttpClientErrorException() {
-        String uri = "invalid.json";
+    void getSubjectJson_notFound() {
+        server.enqueue(new MockResponse()
+                .setResponseCode(404)
+                .addHeader("Content-Type", "application/json")
+                .setBody("{\"error\":\"not found\"}"));
 
-        doAnswer(invocation -> uriSpec).when(webClient).get();
-        doAnswer(invocation -> headersSpec).when(uriSpec).uri(uri);
-        when(headersSpec.retrieve()).thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        StepVerifier.create(client.getSubjectJson("invalid.json"))
+                .expectError(NotFoundException.class)
+                .verify();
+    }
 
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            client.getSubjectJson(uri);
-        });
+    @Test
+    void getSubjectJson_serviceUnavailable() {
+        server.enqueue(new MockResponse()
+                .setResponseCode(503)
+                .addHeader("Content-Type", "application/json")
+                .setBody("{\"error\":\"unavailable\"}"));
+
+        StepVerifier.create(client.getSubjectJson("anything.json"))
+                .expectError(ServiceUnavailableException.class)
+                .verify();
     }
 }
 

@@ -31,10 +31,6 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
     @Autowired private RedisTemplate<String, Object> redis;
     @Override
     public void createListOfBooks(List<String> list) {
-
-        if (list == null || list.isEmpty()) {
-            return;
-        }
         Set<String> genreList = new HashSet<>(list.size());
         list.forEach(genre -> genreList.add(genre + ".json"));
         genreList.parallelStream().forEach(element -> {
