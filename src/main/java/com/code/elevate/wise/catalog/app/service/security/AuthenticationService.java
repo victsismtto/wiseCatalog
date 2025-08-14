@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.code.elevate.wise.catalog.domain.dto.AuthenticationDTO;
-import com.code.elevate.wise.catalog.domain.dto.LoginResponseDTO;
 import com.code.elevate.wise.catalog.domain.dto.RegisterDTO;
 import com.code.elevate.wise.catalog.domain.entity.UserEntity;
 import com.code.elevate.wise.catalog.app.repository.UserRepository;
@@ -60,15 +59,16 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> register(RegisterDTO data) {
-        if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> register(RegisterDTO data) {
+        if(this.repository.findByLogin(data.login()).isPresent()) return ResponseEntity.badRequest().build();
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         UserEntity newUser = new UserEntity(data.login(), encryptedPassword, data.role());
         repository.save(newUser);
         log.info("user saved in the database");
         return ResponseEntity.created(URI.create("/auth/register")).build();
     }
-    private Instant genExpirationDate(){
+
+    private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
     }
 }

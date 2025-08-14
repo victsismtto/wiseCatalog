@@ -1,5 +1,6 @@
 package com.code.elevate.wise.catalog.app.service.impl;
 
+import com.code.elevate.wise.catalog.domain.dto.WorkDTO;
 import com.code.elevate.wise.catalog.infra.client.OpenLibraryClient;
 import com.code.elevate.wise.catalog.domain.dto.SubjectDTO;
 import com.code.elevate.wise.catalog.domain.entity.BookEntity;
@@ -12,6 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,11 +28,16 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
     @Autowired private OpenLibraryClient client;
     @Autowired private BooksRepository repository;
     @Autowired private OpenLibraryMapper mapper;
-    @Autowired RedisTemplate<String, Object> redis;
-    private static final  List<String> GENRE_LIST = List.of("triller.json", "comedy.json", "romance.json", "action.json", "fantasy.json");
+    @Autowired private RedisTemplate<String, Object> redis;
     @Override
-    public void createListOfBooks() {
-        GENRE_LIST.parallelStream().forEach(element -> {
+    public void createListOfBooks(List<String> list) {
+
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        Set<String> genreList = new HashSet<>(list.size());
+        list.forEach(genre -> genreList.add(genre + ".json"));
+        genreList.parallelStream().forEach(element -> {
             Mono<SubjectDTO> response = client.getSubjectJson(element);
             List<BookEntity> bookEntities = getEntityList(response).collectList().block();
             if (bookEntities != null && !bookEntities.isEmpty())  {
@@ -56,7 +64,7 @@ public class OpenLibraryServiceImpl implements OpenLibraryService {
         return fluxMono.block();
     }
 
-    private Predicate<SubjectDTO.Work> distinctByTitle() {
+    private Predicate<WorkDTO> distinctByTitle() {
         Set<String> seen = ConcurrentHashMap.newKeySet();
         return work -> seen.add(work.getTitle());
     }

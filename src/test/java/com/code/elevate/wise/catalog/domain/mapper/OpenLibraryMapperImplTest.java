@@ -1,6 +1,8 @@
 package com.code.elevate.wise.catalog.domain.mapper;
 
+import com.code.elevate.wise.catalog.domain.dto.AuthorDTO;
 import com.code.elevate.wise.catalog.domain.dto.SubjectDTO;
+import com.code.elevate.wise.catalog.domain.dto.WorkDTO;
 import com.code.elevate.wise.catalog.domain.entity.BookEntity;
 import com.code.elevate.wise.catalog.domain.mapper.impl.OpenLibraryMapperImpl;
 import org.junit.jupiter.api.Test;
@@ -26,10 +28,10 @@ class OpenLibraryMapperImplTest {
 
     @Test
     void toBookEntity_shouldMapAllFields_whenAuthorsAndGenreExist() {
-        SubjectDTO.Work work = new SubjectDTO.Work();
+        WorkDTO work = new WorkDTO();
         work.setTitle("Test Title");
         work.setFirstPublishYear(2020);
-        SubjectDTO.Author author = new SubjectDTO.Author();
+        AuthorDTO author = new AuthorDTO();
         author.setName("Name");
         work.setAuthors(List.of(author));
 
@@ -43,7 +45,7 @@ class OpenLibraryMapperImplTest {
 
     @Test
     void toBookEntity_shouldSetAuthorUnknown_whenNoAuthors() {
-        SubjectDTO.Work work = new SubjectDTO.Work();
+        WorkDTO work = new WorkDTO();
         work.setTitle("Test Title");
         work.setFirstPublishYear(2020);
         work.setAuthors(Collections.emptyList());
@@ -55,10 +57,10 @@ class OpenLibraryMapperImplTest {
 
     @Test
     void toBookEntity_shouldSetGenreUnknown_whenGenreIsNull() {
-        SubjectDTO.Work work = new SubjectDTO.Work();
+        WorkDTO work = new WorkDTO();
         work.setTitle("Test Title");
         work.setFirstPublishYear(2020);
-        SubjectDTO.Author author = new SubjectDTO.Author();
+        AuthorDTO author = new AuthorDTO();
         author.setName("Name");
         work.setAuthors(List.of(author));
 

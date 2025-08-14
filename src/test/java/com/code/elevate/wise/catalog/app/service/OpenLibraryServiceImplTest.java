@@ -3,6 +3,7 @@ package com.code.elevate.wise.catalog.app.service;
 import com.code.elevate.wise.catalog.app.repository.BooksRepository;
 import com.code.elevate.wise.catalog.app.service.impl.OpenLibraryServiceImpl;
 import com.code.elevate.wise.catalog.domain.dto.SubjectDTO;
+import com.code.elevate.wise.catalog.domain.dto.WorkDTO;
 import com.code.elevate.wise.catalog.domain.entity.BookEntity;
 import com.code.elevate.wise.catalog.domain.mapper.OpenLibraryMapper;
 import com.code.elevate.wise.catalog.infra.client.OpenLibraryClient;
@@ -54,7 +55,7 @@ class OpenLibraryServiceImplTest {
 
     @Test
     void createListOfBooks_ShouldSaveBooks_WhenClientReturnsData() {
-        SubjectDTO.Work work = new SubjectDTO.Work();
+        WorkDTO work = new WorkDTO();
         work.setTitle("Book One");
 
         SubjectDTO dto = new SubjectDTO();
@@ -67,7 +68,7 @@ class OpenLibraryServiceImplTest {
         when(repository.findByTitle(anyString())).thenReturn(Optional.empty());
         when(mapper.toBookEntity(any(), anyString())).thenReturn(entity);
 
-        service.createListOfBooks();
+        service.createListOfBooks(List.of("fantasy"));
 
         verify(repository, atLeastOnce()).saveAll(anyList());
     }

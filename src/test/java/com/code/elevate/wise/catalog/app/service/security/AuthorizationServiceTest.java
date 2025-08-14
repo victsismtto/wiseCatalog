@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -25,7 +27,7 @@ class AuthorizationServiceTest {
     void loadUserByUsername_shouldReturnUserDetails_whenUserExists() {
         String username = "user";
         UserDetails user = mock(UserDetails.class);
-        when(repository.findByLogin(username)).thenReturn(user);
+        when(repository.findByLogin(username)).thenReturn(Optional.ofNullable(user));
 
         UserDetails result = service.loadUserByUsername(username);
 

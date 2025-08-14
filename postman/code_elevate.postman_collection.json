@@ -96,7 +96,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "[\"triller\", \"comedy\", \"romance\", \"action\", \"fantasy\"]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -240,14 +240,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/books/689b50c57826c96c5511df81",
+					"raw": "localhost:8080/books/689d26a283d2ce1bd6454adb",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"books",
-						"689b50c57826c96c5511df81"
+						"689d26a283d2ce1bd6454adb"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -373,7 +373,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/books/author/Wilkie Collins",
+					"raw": "localhost:8080/books/author/Emily Brontë",
 					"host": [
 						"localhost"
 					],
@@ -381,7 +381,7 @@
 					"path": [
 						"books",
 						"author",
-						"Wilkie Collins"
+						"Emily Brontë"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
