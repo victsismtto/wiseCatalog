@@ -56,6 +56,12 @@ Depois, para pegar um token e acessar todos os endpoints por uma hora com eles, 
     "password": "pass1"
     }
 
+Depois, para criar uma lista, deve chamar o endpoint abaixo:
+
+    POST /openLibrary/create - Logar no sistema Deve ser enviado o um body em raw
+    ["triller", "comedy", "romance", "action", "fantasy"]
+
+
 Consultas (as requisições precisam do token retornado no endpoint de login):
 
     GET /books?page=0&pageSize=10 - Retorna todos os livros cadastrados
@@ -64,6 +70,9 @@ Consultas (as requisições precisam do token retornado no endpoint de login):
     GET /books/{id} - Retorna um livro por ID
     GET /books/recently - Retorna os últimos livros acessados (do retorno por id)
 
+Depois, caso necessite, chamar o endpoint abaixo para deletar a lista de livros e limpar o redis:
+
+    DELETE /openLibrary/delete - Logar no sistema Deve ser enviado o um body em raw
 
 ## Tecnologias Utilizadas
 
