@@ -1,4 +1,4 @@
-FROM openjdk:24-slim
+FROM openjdk:17-slim
 WORKDIR /app
 COPY target/wise.catalog-1.0.0.jar app.jar
 EXPOSE 8080
