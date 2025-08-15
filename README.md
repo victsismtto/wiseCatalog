@@ -235,9 +235,9 @@ Imagens:
 - Poderia ser adicionada uma consulta para verificar a disponibilidade de compra do livro, mostrando a quantidade disponível no estoque.
 - Implementar um limite no tamanho do cache para a consulta dos livros mais recentemente visualizados.
 - Caso o projeto seja hospedado na internet, por exemplo, na Azure, as secrets deveriam ser armazenadas em um Key Vault e espelhadas no pod para garantir a proteção delas.
-- Adicionar certificado de transporte seguro e assinatura digital caso sejam criados endpoints para compras online.
-- Utilizar uma varredura em batch para incluir novos livros ou atualizar as quantidades disponíveis conforme o estoque.
-- Criei um endpoint interno para deletar os livros e limpar o cache, faltou implementar uma configuração que apenas usuários com role ADMIN possa acessar esse endpoint.
+- Adicionar certificado de transporte seguro e assinatura digital caso sejam criados endpoints para compras on-line.
+- Utilizar um batch para incluir novos livros ou atualizar as quantidades disponíveis conforme o estoque.
+- Faltou implementar uma configuração que apenas usuários com role ADMIN possa acessar esse endpoint.
 
 ## Author
 
